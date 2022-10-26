@@ -5,13 +5,13 @@ import os
 import glob
 
 params={
-"eta": [2.0,10.0,100.0],
-"rmin":2.6,
-"rmax":6.0,
-"r_s": [1.0,2.0,3.0],
+"eta": [0.035,0.06,0.1],
+"rmin":0.5,
+"rmax":6.5,
+"r_s": [1.0],
 "kappa":[2.5,8.5],
 "labd": [1.0, -1.0],
-"xi": [1.0, 2.0, 4.0]
+"xi": [0.001, 0.002, 0.003]
 }
 
 """
@@ -45,8 +45,8 @@ def acsf(mol):
             for xi in params["xi"]:
                 for eta in params["eta"]:
                     g4_sum=0
-                    for j in range(len(three_atom_permutations)):
-                        g4_sum+=NNP.G4(three_atom_permutations[j][0][1:], three_atom_permutations[j][1][1:], three_atom_permutations[j][2][1:], eta, labd, xi, params["rmin"], params["rmax"])
+                    for j in range(3):
+                        g4_sum+=NNP.G4(three_atom_permutations[j][0][1:], three_atom_permutations[j][1][1:], three_atom_permutations[j][2][1:], eta, labd, xi, params["rmin"], params["rmax"]) # issue?
                     G4_data.append(g4_sum)
         G2_data=np.array(G2_data)
         G4_data=np.array(G4_data)
@@ -58,9 +58,11 @@ Tot=[]
 Tot1=[]
 for i in path:
     atom=np.load(i+"/atom.npy")
+    print(atom)
     energy=np.load(i+"/energy.npy")
     for test in atom:
         mol1=[]
+        test[:,1:]*0.5291772
         mol = test.tolist()
         for s in mol:
             s=[str(i) for i in s]
@@ -71,5 +73,4 @@ for i in path:
 Tot1=np.concatenate((Tot1[0],Tot1[1],Tot1[2],Tot1[3]))
 np.save("symm.npy", np.asarray(Tot))
 np.save("energy.npy",np.array(Tot1))
-print(np.asarray(Tot).shape)
-print(np.asarray(Tot1).shape)
+#print(np.asarray(Tot)[0])
