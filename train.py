@@ -26,12 +26,12 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.net=nn.Sequential(
-            nn.Linear(21,10),
-            nn.ReLU(),
-            nn.Linear(10,100),
-            nn.ReLU(),
+            nn.Linear(21,100),
+            nn.GELU(),
             nn.Linear(100,100),
-            nn.ReLU(),
+            nn.GELU(),
+            nn.Linear(100,100),
+            nn.GELU(),
             nn.Linear(100, 1)
         )
     def forward(self, input:torch.FloatTensor):
@@ -45,7 +45,7 @@ Loss=nn.MSELoss()
 
 
 losse=[]
-for epoch in range(1000):
+for epoch in range(5000):
     loss=None
     for batch_x,batch_y in dataloader:
         y_predict=net(batch_x)
