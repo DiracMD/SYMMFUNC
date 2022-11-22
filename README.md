@@ -1,4 +1,4 @@
-# SYMMETRY FUNCTION for implementation
+# SYMMETRY FUNCTION 
 ## To Do
 
 + [X] find out the G4 descriptor sum equation
