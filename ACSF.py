@@ -1,15 +1,9 @@
+"""
+filename: acsf.py
+author:   Jxiao
+version:  0.1
+"""
 import numpy as np 
-import math as pi
-
-
-# cut off function
-"""
-def cutoff_fc(dist, rmin, rmax):
-    mask = dist >rmin
-    fc = 0.5 * (np.cos(pi * (dist - rmin) / (rmax - rmin)) + 1)
-    fc[dist >= rmax] = 0
-    return fc
-"""
 
 def cutoff_fc(dist, rmin, rmax):
     if dist <= abs(rmax-rmin):
@@ -17,6 +11,15 @@ def cutoff_fc(dist, rmin, rmax):
     elif dist > abs(rmax-rmin):
         fc = 0
     return fc
+
+def cutoff_fc2(dist, rmin, rmax):
+    if dist <= abs(rmax-rmin):
+        fc = pow(np.tanh(1-dist/(rmax-rmin)),3)
+    elif dist > abs(rmax-rmin):
+        fc = 0
+    return fc
+
+
 
 # radial function
 def G1(atom_i, atom_j, rmin, rmax):
@@ -52,8 +55,9 @@ def G4(atom_i, atom_j, atom_k, xi, labd, eta, rmin, rmax):
     fc_ij = cutoff_fc(dist_ij, rmin, rmax)
     fc_ik = cutoff_fc(dist_ik, rmin, rmax)
     fc_jk = cutoff_fc(dist_jk, rmin, rmax)
-    angle_ijk = np.arccos(np.dot(i-j, i-k) / (dist_ij * dist_ik))
-    return 2**(1-xi) * (1 + labd * np.cos(angle_ijk))**(xi)*np.exp(-eta * (dist_ij**2+dist_ik**2+dist_jk**2)) * fc_ij * fc_ik * fc_jk
+    costheta = 0.5/(dist_ij*dist_ik)*(dist_ij**2+dist_ik**2-dist_jk**2)
+    gauss=np.exp(-eta * (dist_ij**2+dist_ik**2+dist_jk**2)) * fc_ij * fc_ik * fc_jk
+    return 2 * pow(0.5*(1 + labd * costheta),xi)*gauss
 
 def G5(atom_i, atom_j, atom_k, xi, labd, eta, rmin, rmax):
     i=np.array([float(i) for i in atom_i])
@@ -64,6 +68,6 @@ def G5(atom_i, atom_j, atom_k, xi, labd, eta, rmin, rmax):
     dist_jk = np.linalg.norm(j-k)
     fc_ij = cutoff_fc(dist_ij, rmin, rmax)
     fc_ik = cutoff_fc(dist_ik, rmin, rmax)
-    fc_jk = cutoff_fc(dist_jk, rmin, rmax)
-    angle_ijk = np.arccos(np.dot(i-j, i-k) / (dist_ij * dist_ik))
-    return (2-xi) * (1 + labd * np.cos(angle_ijk))**(xi) * np.exp(-eta * (dist_ij**2+dist_ik**2)) * fc_ij * fc_ik
+    costheta = 0.4/(dist_ij*dist_ik)*(dist_ij**2+dist_ik**2-dist_jk**2)
+    gauss=np.exp(-eta * (dist_ij**2+dist_ik**2+dist_jk**2)) * fc_ij * fc_ik
+    return 2 * pow(0.5*(1 + labd * costheta),xi)*gauss
