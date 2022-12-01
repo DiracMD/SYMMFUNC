@@ -85,4 +85,4 @@ plt.scatter(result[:,0], result[:,1])
 print(result)
 plt.xlabel("$E_{tot}-E_{atom}$(kcal/mol)")
 plt.ylabel("Deleta E/(eV)")
-plt.savefig("Delta.png")
+plt.savefig("Delta.png")j
