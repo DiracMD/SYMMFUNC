@@ -1,4 +1,5 @@
 # SYMMETRY FUNCTION 
+a simple project for symmetry function testing 
 ## To Do
 
 + [X] find out the G4 descriptor sum equation
