@@ -1,5 +1,5 @@
 # SYMMETRY FUNCTION 
-a simple project for symmetry function testing 
+a simple code example for symmetry function fitting 
 ## To Do
 
 + [X] find out the G4 descriptor sum equation
